@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.hayden.aspectjandlombok;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,8 @@ public class ToAspect {
     public void someFunction() {}
     public void someFunction(String args) {}
 
+    public void test() {
+    }
 
 
 }

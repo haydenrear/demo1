@@ -8,11 +8,11 @@
         <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo1</artifactId>
+    <groupId>com.hayden</groupId>
+    <artifactId>aspectj-and-lombok</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo1</name>
-    <description>demo1</description>
+    <name>aspectj-and-lombok</name>
+    <description>Maven with AspectJ and Lombok and Java 17</description>
     <properties>
         <java.version>17</java.version>
         <aspectj-plugin.version>1.13.2-SNAPSHOT</aspectj-plugin.version>
@@ -22,6 +22,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -42,13 +43,13 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>/delombok/src-bak/src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>dev.aspectj</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <version>${aspectj-plugin.version}</version>
                 <configuration>
-                    <enablePreview>false</enablePreview>
                     <complianceLevel>${java.version}</complianceLevel>
                     <source>17</source>
                     <target>17</target>
@@ -56,12 +57,12 @@
                     <Xlint>ignore</Xlint>
                     <encoding>UTF-8</encoding>
                     <excludes>
-                        <exclude>**/pointcutadvice/**</exclude>
+                        <exclude>src/main/java/**/*.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>test</phase>
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>compile</goal>
                             <goal>test-compile</goal>
@@ -72,10 +73,41 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>17</source>
                     <target>17</target>
                     <compilerArgs>--enable-preview</compilerArgs>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.20.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>src/main/java</sourceDirectory>
+                    <outputDirectory>delombok/src-bak/src/main/java</outputDirectory>
+                    <verbose>true</verbose>
+                    <formatPreferences>
+                        <generateDelombokComment>skip</generateDelombokComment>
+                        <javaLangAsFQN>skip</javaLangAsFQN>
+                        <suppressWarnings>skip</suppressWarnings>
+                    </formatPreferences>
                 </configuration>
             </plugin>
         </plugins>

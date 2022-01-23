@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.hayden.aspectjandlombok;
 
 
 public class Demo1Application {
